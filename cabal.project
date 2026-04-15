@@ -1,0 +1,9 @@
+packages: .
+
+-- Дополнительные пути для нахождения разделяемых библиотек
+-- (BLAS, LAPACK для hmatrix; GMP для GHC runtime)
+package *
+  extra-lib-dirs:
+    /home/jurydes/.local/lib
+    /usr/lib/x86_64-linux-gnu
+    /lib/x86_64-linux-gnu

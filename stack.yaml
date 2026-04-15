@@ -1,0 +1,22 @@
+# Stack конфигурация проекта.
+# Используем LTS-24 snapshot, который включает hmatrix.
+
+snapshot:
+  url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/24/36.yaml
+
+packages:
+- .
+
+# Используем системный GHC (установленный через ghcup)
+system-ghc: true
+install-ghc: false
+
+# Дополнительные пути к разделяемым библиотекам
+# (нужны для hmatrix: BLAS, LAPACK, GMP)
+extra-lib-dirs:
+  - /usr/lib/x86_64-linux-gnu
+  - /lib/x86_64-linux-gnu
+  - /home/jurydes/.local/lib
+
+extra-include-dirs:
+  - /usr/include

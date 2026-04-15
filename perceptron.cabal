@@ -1,0 +1,45 @@
+cabal-version:       2.2
+
+name:                perceptron
+version:             0.1.0.0
+synopsis:            Реализация алгоритма перцептрона — курсовой проект по ML
+description:
+    Перцептрон Розенблатта с тремя функциями активации (ADT).
+    Поддерживает обучение, предсказание, оценку качества и
+    сохранение/загрузку модели.
+license:             BSD-3-Clause
+build-type:          Simple
+
+-- -------------------------------------------------------
+-- Библиотека с основными модулями
+-- -------------------------------------------------------
+library
+  hs-source-dirs:      src
+  exposed-modules:
+      DataLoader
+    , Perceptron
+    , Evaluation
+    , ModelSerializer
+  default-language:    Haskell2010
+  build-depends:
+      base      >= 4.7 && < 5
+    , hmatrix   >= 0.20
+    , directory >= 1.3
+  ghc-options:
+      -Wall
+      -Wno-unused-imports
+
+-- -------------------------------------------------------
+-- Исполняемый файл
+-- -------------------------------------------------------
+executable perceptron
+  hs-source-dirs:      app
+  main-is:             Main.hs
+  default-language:    Haskell2010
+  build-depends:
+      base        >= 4.7 && < 5
+    , perceptron
+    , hmatrix     >= 0.20
+  ghc-options:
+      -Wall
+      -Wno-unused-imports
