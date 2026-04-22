@@ -31,10 +31,10 @@ cabal run perceptron -- <обуч.файл> <тест.файл> [файл_мод
 
 ```bash
 # обучить и оценить
-cabal run perceptron -- data/train.txt data/test.txt
+stack run perceptron -- data/train.txt data/test.txt
 
 # с сохранением модели и выбором функции активации
-cabal run perceptron -- data/train.txt data/test.txt model.txt sigmoid
+stack run perceptron -- data/train.txt data/test.txt model.txt sigmoid
 ```
 
 Если `файл_модели` указан и существует — модель загружается из него. Иначе обучается с нуля и сохраняется.

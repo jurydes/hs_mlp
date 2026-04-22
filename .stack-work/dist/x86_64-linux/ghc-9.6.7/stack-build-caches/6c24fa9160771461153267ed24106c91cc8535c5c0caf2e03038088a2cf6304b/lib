@@ -1,10 +1,10 @@
 /home/jurydes/mlp/perceptron/perceptron.cabal:
-  hash: bf0bf33099975e58e0d6b70be6cb10b36c57c4890f78c834ab42b2b01f6f0bde
+  hash: d4009c90268d809d27da468e7be0a2cf827a643045ca5047bbdd1b09a22eb1ba
 /home/jurydes/mlp/perceptron/src/DataLoader.hs:
-  hash: ccedebe7ea19fea58848b5259cbbc1a56b30a1de82e2e06e3ba1544dbda1e5e9
+  hash: 7739f9639702b0c9a098c27807ac3211a15152ebf9faa89895ecb06b7b73d52e
 /home/jurydes/mlp/perceptron/src/Evaluation.hs:
   hash: cd47532dc5766187cbcccebd0c070a09c6b70c832e39591b396159962d94a5c0
 /home/jurydes/mlp/perceptron/src/ModelSerializer.hs:
-  hash: 0dd5aa09cd68078a71450c8c1e6cfedf156f08fe40bce5ad3124067e50f764ba
+  hash: 94a46646183d92a951d63b06e56cb4fb02576a2eaef4239077a242d959379687
 /home/jurydes/mlp/perceptron/src/Perceptron.hs:
-  hash: 014d0066519089d0e9297b30e5b38bd0512d1a79b6f1fed1e7f8d6d18efd1e06
+  hash: c86c478e8d7e6bc65c445670205ce7a6f3852534e35e20792fe84d663eec77ef
