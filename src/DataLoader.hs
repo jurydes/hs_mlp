@@ -1,4 +1,5 @@
 {-# LANGUAGE NamedFieldPuns #-}
+-- Включает синтаксис Dataset{datasetFeatureVectors} — короткая запись для извлечения поля из записи без явного datasetFeatureVectors = datasetFeatureVectors
 module DataLoader
   ( Dataset(..)
   , loadDataset

@@ -60,6 +60,7 @@ run trainFile testFile modelFile act = do
           accPct     = round (acc * 100) :: Int
 
       putStrLn "Предсказания (реальный -> предсказанный):"
+      -- тут я спросил нейронку, как красиво отформатировать вывод, и она предложила так, промпт не нашел :(
       mapM_ (\(t, p) -> putStrLn $ show (round t :: Int) ++ " -> " ++ show (round p :: Int)
                                  ++ if t == p then "" else "  !") (zip trueLabels preds)
 
