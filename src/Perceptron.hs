@@ -46,7 +46,7 @@ updateWeights :: ActivationFunction -> Double -> Weights -> Bias
              -> Vector Double -> Double -> (Weights, Bias, Bool)
 updateWeights act eta (Weights w) (Bias b) x y
   | err == 0  = (Weights w, Bias b, False)
-  | otherwise = ( Weights (fromList (zipWith (\wi xi -> wi + eta*err*xi) (toList w) (toList x)))
+  | otherwise = ( Weights $ fromList $ zipWith (\wi xi -> wi + eta*err*xi) (toList w) (toList x)
                 , Bias (b + eta * err)
                 , True )
   where err = y - activate act (w <.> x + b)
@@ -68,7 +68,7 @@ trainPerceptron cfg xs ys = go initW initB 0
               then map (\l -> if l > 0 then 1.0 else -1.0) ys
               else ys
     nFeats  = case xs of { [] -> 0; v:_ -> size v }
-    initW   = Weights (fromList (replicate nFeats 0.0))
+    initW   = Weights $ fromList $ replicate nFeats 0.0
     initB   = Bias 0.0
     go ws bs epoch
       | epoch >= pcMaxEpochs cfg = PerceptronModel ws bs cfg epoch

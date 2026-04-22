@@ -1,11 +1,8 @@
 module Main where
 
 import System.Environment (getArgs)
-import System.Exit        (exitWith, ExitCode(..))
-import Control.Monad      (when)
 
-import DataLoader      (loadDataset, numSamples, numFeatures,
-                        datasetFeatureVectors, datasetLabels)
+import DataLoader      (Dataset(..), loadDataset, numSamples, numFeatures)
 import Perceptron      (ActivationFunction(..), PerceptronModel(..),
                         defaultConfig, trainPerceptron, predictAll)
 import Evaluation      (computeAccuracy, normalizeToClass)
@@ -23,6 +20,18 @@ main = do
         Nothing  -> die $ "Неизвестная функция активации: " ++ an
     _ -> die "Использование: perceptron <обуч.файл> <тест.файл> [файл_модели] [step|sign|sigmoid]"
 
+trainAndReport :: ActivationFunction -> Dataset -> Maybe FilePath -> IO PerceptronModel
+trainAndReport act trainData mFile = do
+  let m = trainPerceptron (defaultConfig act)
+            (datasetFeatureVectors trainData) (datasetLabels trainData)
+  putStrLn $ "Обучено за " ++ show (pmEpochsTrained m) ++ " эпох."
+  case mFile of
+    Nothing -> return ()
+    Just mf -> do
+      saveModel mf m
+      putStrLn ("Сохранено: " ++ mf)
+  return m
+
 run :: FilePath -> FilePath -> Maybe FilePath -> ActivationFunction -> IO ()
 run trainFile testFile modelFile act = do
   trainData <- loadDataset trainFile
@@ -32,36 +41,29 @@ run trainFile testFile modelFile act = do
   putStrLn $ "Тестовая:  " ++ show (numSamples testData)  ++ " объектов, " ++ show (numFeatures testData)  ++ " признаков"
   putStrLn $ "Активация: " ++ show act
 
-  when (numFeatures trainData /= numFeatures testData && numFeatures testData /= 0) $
-    die "Число признаков в обучающей и тестовой выборках не совпадает"
+  if numFeatures trainData /= numFeatures testData && numFeatures testData /= 0
+    then die "Число признаков в обучающей и тестовой выборках не совпадает"
+    else do
+      model <- case modelFile of
+        Nothing -> trainAndReport act trainData Nothing
+        Just mf -> do
+          r <- loadModel mf
+          case r of
+            Just m  -> do
+              putStrLn "Модель загружена."
+              return m
+            Nothing -> trainAndReport act trainData (Just mf)
 
-  let trained = trainPerceptron (defaultConfig act)
-                  (datasetFeatureVectors trainData) (datasetLabels trainData)
+      let trueLabels = datasetLabels testData
+          preds      = map normalizeToClass (predictAll model (datasetFeatureVectors testData))
+          acc        = computeAccuracy trueLabels preds
+          accPct     = round (acc * 100) :: Int
 
-  model <- case modelFile of
-    Nothing -> do
-      putStrLn $ "Обучено за " ++ show (pmEpochsTrained trained) ++ " эпох."
-      return trained
-    Just mf -> do
-      r <- loadModel mf
-      case r of
-        Just m  -> putStrLn "Модель загружена." >> return m
-        Nothing -> do
-          putStrLn $ "Обучено за " ++ show (pmEpochsTrained trained) ++ " эпох."
-          saveModel mf trained
-          putStrLn $ "Сохранено: " ++ mf
-          return trained
+      putStrLn "Предсказания (реальный -> предсказанный):"
+      mapM_ (\(t, p) -> putStrLn $ show (round t :: Int) ++ " -> " ++ show (round p :: Int)
+                                 ++ if t == p then "" else "  !") (zip trueLabels preds)
 
-  let trueLabels  = datasetLabels testData
-      preds       = map normalizeToClass (predictAll model (datasetFeatureVectors testData))
-      acc         = computeAccuracy trueLabels preds
-      accPct      = round (acc * 100) :: Int
+      putStrLn $ "Точность: " ++ show accPct ++ "%"
 
-  putStrLn "Предсказания (реальный -> предсказанный):"
-  mapM_ (\(t, p) -> putStrLn $ show (round t :: Int) ++ " -> " ++ show (round p :: Int)
-                             ++ if t == p then "" else "  !") (zip trueLabels preds)
-
-  putStrLn $ "Точность: " ++ show accPct ++ "%"
-
-die :: String -> IO a
-die msg = putStrLn ("[ОШИБКА] " ++ msg) >> exitWith (ExitFailure 1)
+die :: String -> IO ()
+die msg = putStrLn ("[ОШИБКА] " ++ msg)
