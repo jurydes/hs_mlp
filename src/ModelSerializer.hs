@@ -35,7 +35,7 @@ deserialize content = case lines content of
     | hdr /= "PERCEPTRON_MODEL_V1" -> Nothing
     | otherwise -> do
         let splitKV s = let (k, r) = break (== ':') s
-                            trim   = dropWhileEnd (== ' ') . dropWhile (== ' ')
+                            trim   = dropWhileEnd (== ' ') . dropWhile (== ' ') -- trim = сначала dropWhile, потом dropWhileEnd
                         in (trim k, dropWhile (== ' ') $ drop 1 r)
             fm    = map splitKV rest
             get k = lookup k fm

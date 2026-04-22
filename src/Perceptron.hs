@@ -15,7 +15,7 @@ import Numeric.LinearAlgebra (Vector, fromList, toList, (<.>), size)
 data ActivationFunction
   = StepFunction       -- ^ 0/1, порог в 0
   | SignFunction       -- ^ -1/+1, метки {-1, +1}
-  | SigmoidThreshold   -- ^ σ(x) >= 0.5 → 1, иначе → 0
+  | SigmoidThreshold   -- ^ сигма(x) >= 0.5 → 1, иначе → 0
   deriving (Show, Read, Eq)
 
 newtype Weights = Weights { unWeights :: Vector Double } deriving (Show)
